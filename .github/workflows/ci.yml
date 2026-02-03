@@ -17,11 +17,6 @@ jobs:
         uses: pre-commit/action@v3.0.1
 
       - name: Run Snyk to check for vulnerabilities
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r backend/requirements.txt
         uses: snyk/actions/python-3.11@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK }}
