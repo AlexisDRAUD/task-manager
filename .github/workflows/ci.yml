@@ -19,14 +19,19 @@ jobs:
           cd backend
           pip install -r requirements.txt
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
 
       - name: Run Snyk to check for vulnerabilities
         run: |
           cd backend
-          pip install snyk
-          snyk config set api=${{ secrets.SNYK_TOKEN }}
+          npm install -g snyk
+          snyk auth ${{ secrets.SNYK_TOKEN }}
           snyk test --file=requirements.txt
         env:
           SNYK_TOKEN: ${{ secrets.SNYK }}
