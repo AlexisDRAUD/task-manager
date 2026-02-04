@@ -86,6 +86,7 @@ jobs:
           cache-to: type=inline
 
       - name: Scan Backend image with Trivy
+        if: github.event_name != 'pull_request'
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE_NAME }}:${{ steps.meta-backend.outputs.version }}
@@ -94,6 +95,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Scan Frontend image with Trivy
+        if: github.event_name != 'pull_request'
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE_NAME }}:${{ steps.meta-frontend.outputs.version }}
