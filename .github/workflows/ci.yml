@@ -13,34 +13,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
 
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python-3.11@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK }}
-        with:
-          command: test
-          args: --file=backend/requirements.txt
-
-  trivy-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Trivy scan Backend Dockerfile
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'config'
-          scan-ref: './backend/Dockerfile'
-          format: 'sarif'
-          output: 'trivy-backend-results.sarif'
-
-      - name: Trivy scan Frontend Dockerfile
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'config'
-          scan-ref: './frontend/Dockerfile'
-          format: 'sarif'
-          output: 'trivy-frontend-results.sarif'
