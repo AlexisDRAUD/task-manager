@@ -1,4 +1,5 @@
-FROM python:3.12
+FROM python:3.12@sha256:df3b7c223e6fee2bd45166f5ebd3fd9d2c09d5e5f8b62b36f4c5d72fc63dc8a1
+LABEL maintainer="Alexis DRAUD"
 
 WORKDIR /app
 COPY . /app/
