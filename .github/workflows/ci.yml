@@ -23,3 +23,24 @@ jobs:
         with:
           command: test
           args: --file=backend/requirements.txt
+
+  trivy-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trivy scan Backend Dockerfile
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: './backend/Dockerfile'
+          format: 'sarif'
+          output: 'trivy-backend-results.sarif'
+
+      - name: Trivy scan Frontend Dockerfile
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          scan-ref: './frontend/Dockerfile'
+          format: 'sarif'
+          output: 'trivy-frontend-results.sarif'
