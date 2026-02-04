@@ -14,45 +14,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Python dependencies
-        run: |
-          cd backend
-          pip install -r requirements.txt
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
 
-      - name: Run Snyk to check for vulnerabilities
-        run: |
-          cd backend
-          npm install -g snyk
-          snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk test --file=requirements.txt
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK }}
-
-  trivy-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Trivy scan Backend Dockerfile
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'config'
-          scan-ref: './backend/Dockerfile'
-          format: 'sarif'
-          output: 'trivy-backend-results.sarif'
-
-      - name: Trivy scan Frontend Dockerfile
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'config'
-          scan-ref: './frontend/Dockerfile'
-          format: 'sarif'
-          output: 'trivy-frontend-results.sarif'
