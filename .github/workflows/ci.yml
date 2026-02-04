@@ -23,12 +23,13 @@ jobs:
         uses: pre-commit/action@v3.0.1
 
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python-3.11@master
+        run: |
+          cd backend
+          pip install snyk
+          snyk config set api=${{ secrets.SNYK_TOKEN }}
+          snyk test --file=requirements.txt
         env:
           SNYK_TOKEN: ${{ secrets.SNYK }}
-        with:
-          command: test
-          args: --file=backend/requirements.txt
 
   trivy-scan:
     runs-on: ubuntu-latest
