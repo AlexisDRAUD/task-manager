@@ -1,3 +1,5 @@
+"""Main application, point d'entrée."""
+
 import os
 import yaml
 
@@ -29,24 +31,24 @@ Base.metadata.create_all(bind=engine)
 
 
 @app.get("/debug")
-def debug() -> dict:
+def debug() -> Dict[str, str]:
     """Affiche variables d'environnement"""
     return {"env": dict(os.environ)}
 
 @app.get("/health")
-def health() -> dict:
+def health() -> Dict[str, str]:
     """Vérifie health de l'app."""
     return {"status": "ok"}
 
 @app.get("/admin/stats")
-def admin_stats(x_api_key: str | None = Header(default=None)) -> dict:
+def admin_stats(x_api_key: str | None = Header(default=None)) -> Dict[str, str]:
     """Retourne stats admin"""
     if x_api_key != API_KEY:
         raise HTTPException(status_code=401, detail="Unauthorized")
     return {"tasks": "…"}
 
 @app.post("/import")
-def import_yaml(payload: str = Body(embed=True)) -> dict:
+def import_yaml(payload: str = Body(embed=True)) -> Dict[str, object]:
     """Import données depuis fichier YAML"""
     data = yaml.full_load(payload)
     return {"imported": True, "keys": list(data.keys()) if isinstance(data, dict) else "n/a"}

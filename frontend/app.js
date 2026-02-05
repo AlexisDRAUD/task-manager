@@ -1,19 +1,19 @@
+"""Database configuration"""
+
 const HTTP_NO_CONTENT = 204;
 const DEFAULT_API_URL = "http://127.0.0.1:8000";
 
 // Change this if your API runs elsewhere (CI, container, remote)
-window.API_URL = localStorage.getItem("API_URL") || DEFAULT_API_URL;
-document.getElementById("apiUrlLabel").textContent = window.API_URL;
+globalThis.API_URL = localStorage.getItem("API_URL") || DEFAULT_API_URL;
+document.getElementById("apiUrlLabel").textContent = globalThis.API_URL;
 
 async function api(path, options = {}) {
-  const res = await fetch(`${window.API_URL}${path}`, {
+  const res = await fetch(`${globalThis.API_URL}${path}`, {
     headers: { "Content-Type": "application/json" },
     ...options,
   });
 
-  if (res.status === HTTP_NO_CONTENT) {
-    return null;
-  }
+  if (res.status === HTTP_NO_CONTENT) return null;
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
@@ -55,7 +55,7 @@ function taskCard(task) {
   });
 
   div.querySelector('[data-role="delete"]').addEventListener("click", async () => {
-    const shouldDelete = window.confirm("Supprimer cette tâche ?");
+    const shouldDelete = await confirmDelete("Supprimer cette tâche ?");
     if (!shouldDelete) {
       return;
     }
@@ -65,6 +65,10 @@ function taskCard(task) {
   });
 
   return div;
+}
+
+async function confirmDelete(message) {
+  return Promise.resolve(globalThis.confirm(message));
 }
 
 function escapeHtml(s) {
@@ -96,7 +100,7 @@ async function refresh() {
       <p style="color:#b00020">
         <strong>Erreur :</strong> ${escapeHtml(e.message)}
       </p>
-      <p>Vérifie que l’API tourne sur <code>${window.API_URL}</code>.</p>
+      <p>Vérifie que l’API tourne sur <code>${globalThis.API_URL}</code>.</p>
     `;
   }
 }

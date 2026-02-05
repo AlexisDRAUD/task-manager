@@ -1,6 +1,7 @@
+"""Schémas des données"""
+
 from pydantic import BaseModel, Field
 from datetime import datetime
-
 
 class TaskCreate(BaseModel):
     """Modèle de création de Tâche"""

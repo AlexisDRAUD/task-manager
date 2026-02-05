@@ -1,8 +1,9 @@
+"""Task model"""
+
 from sqlalchemy import String, Integer, DateTime
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime, timezone
 from .db import Base
-"""Task model"""
 
 class Task(Base):
     """class Tâche"""
