@@ -1,5 +1,3 @@
-"""Database configuration"""
-
 const HTTP_NO_CONTENT = 204;
 const DEFAULT_API_URL = "http://127.0.0.1:8000";
 

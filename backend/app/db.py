@@ -2,7 +2,7 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session, DeclarativeBase
-from typing import Generator
+from typing import Generator, Dict
 
 # SQLite local file. In CI, you can swap to Postgres later.
 DATABASE_URL = "sqlite:///./taskmanager.db"
