@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import select, text
 from datetime import datetime, timezone
+from typing import Dict
 
 from .db import Base, engine, get_db
 from .models import Task

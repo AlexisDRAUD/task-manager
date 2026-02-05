@@ -11,7 +11,9 @@ async function api(path, options = {}) {
     ...options,
   });
 
-  if (res.status === HTTP_NO_CONTENT) return null;
+  if (res.status === HTTP_NO_CONTENT) {
+    return null
+  };
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
@@ -54,9 +56,7 @@ function taskCard(task) {
 
   div.querySelector('[data-role="delete"]').addEventListener("click", async () => {
     const shouldDelete = await confirmDelete("Supprimer cette tâche ?");
-    if (!shouldDelete) {
-      return;
-    }
+    if (!shouldDelete) return;
 
     await api(`/tasks/${task.id}`, { method: "DELETE" });
     await refresh();
@@ -66,7 +66,35 @@ function taskCard(task) {
 }
 
 async function confirmDelete(message) {
-  return Promise.resolve(globalThis.confirm(message));
+  return new Promise(resolve => {
+    const dialog = document.getElementById("confirmDialog");
+    const msg = document.getElementById("confirmMessage");
+    const ok = document.getElementById("confirmOk");
+    const cancel = document.getElementById("confirmCancel");
+
+    msg.textContent = message;
+
+    function cleanup() {
+      ok.removeEventListener("click", onOk);
+      cancel.removeEventListener("click", onCancel);
+      dialog.close();
+    }
+
+    function onOk() {
+      cleanup();
+      resolve(true);
+    }
+
+    function onCancel() {
+      cleanup();
+      resolve(false);
+    }
+
+    ok.addEventListener("click", onOk);
+    cancel.addEventListener("click", onCancel);
+
+    dialog.showModal();
+  });
 }
 
 function escapeHtml(s) {
